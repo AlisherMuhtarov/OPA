@@ -20,6 +20,15 @@ pipeline {
                 }
             }
         }
+        stage('OPA Policy Enforcement') {
+            steps {
+                dir('Terraform') {
+                    script {
+                        sh 'opa eval --data policy.rego --input tfplan "data.main.allow"'
+                    }
+                }
+            }
+        }
         stage('Terraform Apply') {
             steps {
                 dir('Terraform') {
