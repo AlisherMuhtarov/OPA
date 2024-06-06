@@ -4,4 +4,7 @@ resource "aws_instance" "uncompliant" {
   subnet_id = "subnet-098ab2c379f487d8e"
   key_name = "laptop_key"
   security_groups = ["uncompliant"]
+  tags = {
+    Name = "tf-example"
+  }
 }
