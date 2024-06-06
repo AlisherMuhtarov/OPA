@@ -1,12 +1,30 @@
 pipeline {
     agent any
     stages {
-        stage('Pre-Deployment-Check') {
+        stage('Terraform Init') {
+            steps {
+                dir('Terraform') {
+                    script {
+                        sh "terraform init"
+                        sh "opa"
+                    }
+                }
+            }
+        }
+        stage('Terraform Plan') {
+            steps {
+                dir('Terraform') {
+                    script {
+                        sh "terraform plan -out=tfplan"
+                    }
+                }
+            }
+        }
+        stage('Terraform Apply') {
             steps {
                 dir('Terraform') {
                     script {
                         sh "pwd"
-                        sh "ls -l"
                     }
                 }
             }
