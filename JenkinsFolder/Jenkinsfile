@@ -15,8 +15,8 @@ pipeline {
             steps {
                 dir('Terraform') {
                     script {
-                        sh "terraform plan --out tfplan.binary"
-                        sh "tfjson tfplan.binary > tfplan.json"
+                        sh "terraform plan --out plan.tfplan"
+                        sh "terraform show plan.tfplan > plan.json"
                     }
                 }
             }
@@ -25,7 +25,7 @@ pipeline {
             steps {
                 dir('rego') {
                     script {
-                        sh 'opa eval --data tags_keys.rego --input ../Terraform/tfplan.json "data.main.allow"'
+                        sh 'opa eval --data tags_keys.rego --input ../Terraform/plan.json "data.main.allow"'
                     }
                 }
             }
