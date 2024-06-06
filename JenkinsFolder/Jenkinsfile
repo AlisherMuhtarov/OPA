@@ -24,7 +24,7 @@ pipeline {
             steps {
                 dir('rego') {
                     script {
-                        sh 'opa eval --data tags_keys.rego --input tfplan "data.main.allow"'
+                        sh 'opa eval --data tags_keys.rego --input ../Terraform/tfplan "data.main.allow"'
                     }
                 }
             }
