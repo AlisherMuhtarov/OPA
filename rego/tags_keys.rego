@@ -1,23 +1,20 @@
-package main
+package aws_instance_compliance
 
-deny[msg] {
-    resource := input.resource
-    not has_tags(resource)
-    msg := "EC2 instance must have tags defined"
+default allow = false
+
+# Deny creation of AWS instances with the specified configuration
+deny {
+    input.resource == "aws_instance"
+    input.action == "create"
+    input.parameters.ami == "ami-00beae93a2d981137"
+    input.parameters.instance_type == "t2.micro"
+    input.parameters.subnet_id == "subnet-098ab2c379f487d8e"
+    input.parameters.key_name == "laptop_key"
+    input.parameters.security_groups[_] == "uncompliant"
+    input.parameters.tags.Name == "tf-example"
 }
 
-deny[msg] {
-    resource := input.resource
-    not has_key_name(resource)
-    msg := "EC2 instance must have a key name defined"
-}
-
-has_tags(resource) {
-    resource["type"] == "aws_instance"
-    resource["attr"]["tags"] != null
-}
-
-has_key_name(resource) {
-    resource["type"] == "aws_instance"
-    resource["attr"]["key_name"] != null
+# Allow all other actions
+allow {
+    not deny
 }
