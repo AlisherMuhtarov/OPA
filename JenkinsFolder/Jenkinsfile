@@ -3,10 +3,10 @@ pipeline {
     stages {
         stage('Pre-Deployment-Check') {
             steps {
-                dir('../Terraform') {
+                dir('Terraform') {
                     script {
                         sh "pwd"
-                        sh "ls"
+                        sh "ls -l"
                     }
                 }
             }
