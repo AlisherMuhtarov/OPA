@@ -44,7 +44,7 @@ pipeline {
         failure {
             dir('Terraform') {
                 script {
-                    sh "rm -rf tfplan.binary tfplan.json"
+                    sh "rm -rf tfplan.binary"
                 }
             }
         }
