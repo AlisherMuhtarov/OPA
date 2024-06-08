@@ -1,13 +1,15 @@
-package terraform.aws_instance_tag_policy
+package terraform.deny_no_tags
 
-import input as tfplan
+import input.attributes.planned_values.root_module.resources
 
-# Deny creation of AWS instances if they don't have the required tag "env = dev"
 deny[msg] {
-    resource := tfplan.resource_changes[_]
+    resource := resources[_]
     resource.address == "aws_instance.uncompliant"
-    action := resource.change.actions[_]
-    action == "create"
-    not tfplan.configuration.root_module.resources[_].expressions.tags.constant_value.env == "dev"
-    msg := sprintf("Instance '%v' does not have the required tag 'env = dev'", [resource.name])
+    not has_tags(resource.values)
+    msg := sprintf("Resource %v must have tags defined.", [resource.name])
+}
+
+has_tags(tags) {
+    tags != null
+    count(tags) > 0
 }
