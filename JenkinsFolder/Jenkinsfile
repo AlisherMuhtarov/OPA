@@ -15,8 +15,8 @@ pipeline {
             steps {
                 dir('Terraform') {
                     script {
-                        sh "terraform plan -out=tfplan"
-                        sh "terraform show -json tfplan > tfplan.json"
+                        sh "terraform plan --out tfplan.binary"
+                        sh "terraform show -json tfplan.binary > tfplan.json"
                     }
                 }
             }
