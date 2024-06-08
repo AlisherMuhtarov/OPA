@@ -1,20 +1,13 @@
-package aws_instance_compliance
+package terraform.aws_instance_tag_policy
 
-default allow = false
+import input as tfplan
 
-# Deny creation of AWS instances with the specified configuration
-deny {
-    input.resource == "aws_instance"
-    input.action == "create"
-    input.parameters.ami == "ami-00beae93a2d981137"
-    input.parameters.instance_type == "t2.micro"
-    input.parameters.subnet_id == "subnet-098ab2c379f487d8e"
-    input.parameters.key_name == "laptop_key"
-    input.parameters.security_groups[_] == "uncompliant"
-    input.parameters.tags.Name == "tf-example"
-}
-
-# Allow all other actions
-allow {
-    not deny
+# Deny creation of AWS instances if they don't have the required tag "env = dev"
+deny[msg] {
+    resource := tfplan.resource_changes[_]
+    resource.address == "aws_instance.uncompliant"
+    action := resource.change.actions[_]
+    action == "create"
+    not tfplan.configuration.root_module.resources[_].expressions.tags.constant_value.env == "dev"
+    msg := sprintf("Instance '%v' does not have the required tag 'env = dev'", [resource.name])
 }

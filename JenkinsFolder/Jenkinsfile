@@ -25,7 +25,7 @@ pipeline {
             steps {
                 dir('rego') {
                     script {
-                        sh 'opa eval --data tags_keys.rego --input ../Terraform/tfplan.json "data.main.allow"'
+                        sh 'opa eval --data tags_keys.rego --input ../Terraform/tfplan.json "terraform.aws_instance_tag_policy.deny"'
                     }
                 }
             }
