@@ -39,12 +39,12 @@ pipeline {
                 }
             }
         }
-        post {
-            failure {
-                dir('Terraform') {
-                    script {
-                        sh "rm -rf tfplan.binary tfplan.json"
-                    }
+    }
+    post {
+        failure {
+            dir('Terraform') {
+                script {
+                    sh "rm -rf tfplan.binary tfplan.json"
                 }
             }
         }
